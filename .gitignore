@@ -1,0 +1,26 @@
+.DS_Store
+node_modules
+/dist
+
+unplugin-outcome/.eslintrc-auto-import.json
+unplugin-outcome/auto-import.d.ts
+unplugin-outcome/components.d.ts
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+!.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
