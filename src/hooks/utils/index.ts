@@ -117,12 +117,31 @@ const getValueType = (defaultValue: unknown) => {
     : 'any'
 }
 
+/**
+ * 一定范围内的随机数生成
+ */
+const getRandomNum = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+/**
+ * 获取随机字符串
+ * randomLength: 生成的字符串长度
+ */
+const getRandomStr = (randomLength = 5) => {
+  return Number(Math.random().toString().slice(3, 8) + Date.now())
+    .toString(36)
+    .slice(0, randomLength)
+}
+
 export {
   debounce,
   throttle,
   throttleAndDeBounce,
   TypeSerializers,
-  getValueType
+  getValueType,
+  getRandomNum,
+  getRandomStr
 }
 
 export type { Fn }
