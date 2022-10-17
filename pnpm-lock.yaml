@@ -12,6 +12,7 @@ specifiers:
   axios: ^0.27.2
   blueimp-md5: ^2.19.0
   dayjs: ^1.11.5
+  easyqrcodejs: ^4.4.13
   echarts: ^5.4.0
   element-plus: ^2.2.17
   eslint: ^8.23.1
@@ -37,6 +38,7 @@ dependencies:
   axios: 0.27.2
   blueimp-md5: 2.19.0
   dayjs: 1.11.5
+  easyqrcodejs: 4.4.13
   echarts: 5.4.0
   element-plus: 2.2.17_vue@3.2.39
   js-cookie: 3.0.1
@@ -890,6 +892,10 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /easyqrcodejs/4.4.13:
+    resolution: {integrity: sha512-NulfMl+bhx/gAjZcBjgNd99jqPE5wEho1Z3nZwnKNISu0STnVq0xFQ28SVhcnOwt+47BJ80dULVNzpGIwYi66A==}
+    dev: false
 
   /echarts/5.4.0:
     resolution: {integrity: sha512-uPsO9VRUIKAdFOoH3B0aNg7NRVdN7aM39/OjovjO9MwmWsAkfGyeXJhK+dbRi51iDrQWliXV60/XwLA7kg3z0w==}

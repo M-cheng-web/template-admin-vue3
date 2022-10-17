@@ -1,36 +1,18 @@
 <template>
   <div>
-    <div style="width: 60vw">
-      <p>value:{{ state }}</p>
-    </div>
-    <div style="width: 39vw">
-      <button @click="handleUpdate">更新storage</button>
-      <button @click="handleDelete">删除storage</button>
+    <div style="text-align: center">
+      <p ref="p">
+        可选择区域: 123111111111111aaaaaaaaaaabbbbbbbbbbb eeeeeeeeeeeeeeee
+      </p>
+      <p>已选择的值：{{ text }}</p>
+      <p>位置信息：rect: {{ rect }}</p>
+      <p>left: {{ rect.left }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import useLocalStorage from '@/hooks/useLocalStorage'
+import useTextSelection from '@/hooks/useTextSelection'
 
-const state = useLocalStorage('useLocalStorage', { a: 231 })
-
-const handleUpdate = () => {
-  state.value = { a: Math.random() }
-}
-
-const handleDelete = () => {
-  state.value = undefined
-}
+const { text, rect } = useTextSelection()
 </script>
-
-<style scoped lang="scss">
-.full {
-  border: 1px solid red;
-  height: 400px;
-  background-color: aliceblue;
-}
-.backlog {
-  padding: 24px 18px;
-}
-</style>

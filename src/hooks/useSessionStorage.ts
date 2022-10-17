@@ -1,7 +1,7 @@
 import { ref, Ref, isRef, watch as vueWatch } from 'vue'
 import { TypeSerializers, getValueType } from './utils'
 
-const storage = localStorage
+const storage = sessionStorage
 interface Options {
   watch: boolean
 }
@@ -10,14 +10,14 @@ const defaultOptions = {
   watch: true
 }
 
-const useLocalStorage = <T = any>(
+const useSessionStorage = <T = any>(
   key: string,
   initialValue?: T | Ref<T>,
   options?: Options
 ) => {
   const { watch } = { ...defaultOptions, ...options }
-
   const data = ref() as Ref<T | undefined | null>
+
   try {
     if (initialValue !== undefined) {
       data.value = isRef(initialValue) ? initialValue.value : initialValue
@@ -25,12 +25,11 @@ const useLocalStorage = <T = any>(
       data.value = JSON.parse(storage.getItem(key) || '{}')
     }
   } catch (error) {
-    console.log(error, 'useLocalStorage 初始化失败')
+    console.log(error, 'useLocalStorage初始化失败')
   }
 
-  // 判断类型取格式化方法
-  const serializer = TypeSerializers[getValueType(data.value)]
-
+  const type = getValueType(data.value)
+  const serializer = TypeSerializers[type]
   const setStorage = () => storage.setItem(key, serializer.write(data.value))
 
   // 状态监听
@@ -55,4 +54,4 @@ const useLocalStorage = <T = any>(
   return data
 }
 
-export default useLocalStorage
+export default useSessionStorage
