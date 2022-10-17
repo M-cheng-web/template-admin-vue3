@@ -1,18 +1,47 @@
 <template>
-  <div>
-    <div style="text-align: center">
-      <p ref="p">
-        可选择区域: 123111111111111aaaaaaaaaaabbbbbbbbbbb eeeeeeeeeeeeeeee
-      </p>
-      <p>已选择的值：{{ text }}</p>
-      <p>位置信息：rect: {{ rect }}</p>
-      <p>left: {{ rect.left }}</p>
+  <div class="hello">
+    <button
+      style="margin-top: 30px"
+      type="button"
+      @click="handleVirtualScrollTo"
+    >
+      scroll to
+    </button>
+
+    <div
+      :ref="containerProps.ref"
+      @scroll="containerProps.onScroll"
+      style="height: 300px; overflow: auto; border: 1px solid #cccccc"
+    >
+      <div :style="wrapperStyle">
+        <div
+          v-for="active in list"
+          :key="active"
+          style="
+            height: 59px;
+            border-bottom: 1px solid #cccccc;
+            background-color: white;
+          "
+        >
+          {{ active }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import useTextSelection from '@/hooks/useTextSelection'
+import useVirtualList from '@/hooks/useVirtualList'
 
-const { text, rect } = useTextSelection()
+const { list, wrapperStyle, containerProps, scrollTo } = useVirtualList(
+  Array.from(Array(99999).keys()),
+  {
+    itemHeight: 60,
+    overscan: 10
+  }
+)
+
+const handleVirtualScrollTo = () => {
+  scrollTo(22)
+}
 </script>

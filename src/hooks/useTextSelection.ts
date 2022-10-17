@@ -2,6 +2,8 @@ import { Ref, isRef, reactive, onMounted, onUnmounted, toRefs } from 'vue'
 
 type Target = HTMLElement | Ref<HTMLElement> | (() => HTMLElement) | Document
 
+// 兼容性问题: https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getSelection
+
 const defaultReact = {
   left: NaN,
   right: NaN,
@@ -29,6 +31,8 @@ const useTextSelection = (target: Target = document) => {
   const getRect = (selection: Selection | null) => {
     if (!selection) return defaultReact
     const range = selection.getRangeAt(0)
+    // 获取到的 数据是相对于视图的左上角计算的(除 height，width外)
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect
     const { height, width, top, left, right, bottom } =
       range.getBoundingClientRect()
     return {
@@ -57,7 +61,7 @@ const useTextSelection = (target: Target = document) => {
     }
     const currSelection: Selection | null = window.getSelection()
     if (!currSelection) return
-    currSelection.removeAllRanges()
+    currSelection.removeAllRanges() // 移除缓存
   }
 
   onMounted(() => {
