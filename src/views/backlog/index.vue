@@ -1,47 +1,23 @@
 <template>
   <div class="hello">
-    <button
-      style="margin-top: 30px"
-      type="button"
-      @click="handleVirtualScrollTo"
-    >
-      scroll to
-    </button>
-
-    <div
-      :ref="containerProps.ref"
-      @scroll="containerProps.onScroll"
-      style="height: 300px; overflow: auto; border: 1px solid #cccccc"
-    >
-      <div :style="wrapperStyle">
-        <div
-          v-for="active in list"
-          :key="active"
-          style="
-            height: 59px;
-            border-bottom: 1px solid #cccccc;
-            background-color: white;
-          "
-        >
-          {{ active }}
-        </div>
-      </div>
-    </div>
+    <div>webScoket状态： {{ readyState }}</div>
+    <button @click="connect">连接webScoket</button>
+    <button @click="disconnect">关闭webScoket</button>
+    <button @click="handleSendMessage">发送消息</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import useVirtualList from '@/hooks/useVirtualList'
+import useWebSocket from '@/hooks/useWebSocket'
 
-const { list, wrapperStyle, containerProps, scrollTo } = useVirtualList(
-  Array.from(Array(99999).keys()),
-  {
-    itemHeight: 60,
-    overscan: 10
-  }
-)
+const { readyState, latestMessage, connect, disconnect, sendMessage } =
+  useWebSocket('ws://82.157.123.54:9010/ajaxchattest')
 
-const handleVirtualScrollTo = () => {
-  scrollTo(22)
+const handleSendMessage = () => {
+  sendMessage('hello v3hooks')
 }
+
+watchEffect(() => {
+  console.log(latestMessage.value)
+})
 </script>

@@ -12,13 +12,6 @@ const useVirtualList = <T = any>(state: T[], options: OptionType) => {
   const { itemHeight, overscan = 5 } = options
   const containerRef = ref<HTMLElement | null>()
 
-  const totalHeight: number = (() => {
-    if (typeof itemHeight === 'number') {
-      return state.length * itemHeight
-    }
-    return state.reduce((sum, _, index) => sum + itemHeight(index), 0)
-  })()
-
   // 获取当前索引向上高度
   const getDistanceTop = (index: number) => {
     if (typeof itemHeight === 'number') {
@@ -32,14 +25,15 @@ const useVirtualList = <T = any>(state: T[], options: OptionType) => {
   }
 
   let offsetTop = getDistanceTop(start)
+  const totalHeight = getDistanceTop(state.length)
 
   // 计算当前视图展示数量
   const getViewCapacity = (containerHeight: number) => {
     if (typeof itemHeight === 'number') {
       return Math.ceil(containerHeight / itemHeight)
     }
-    let sum = 0
     let capacity = 0
+    let sum = 0
     for (let i = start; i < state.length; i++) {
       const height = (itemHeight as (index: number) => number)(i)
       sum += height
@@ -53,31 +47,32 @@ const useVirtualList = <T = any>(state: T[], options: OptionType) => {
 
   // 获取当前索引
   const getOffset = (scrollTop: number) => {
-    if (typeof itemHeight === 'number') {
-      return Math.floor(scrollTop / itemHeight) + 1
-    }
-    let sum = 0
     let offset = 0
-    for (let i = 0; i < state.length; i++) {
-      const height = (itemHeight as (index: number) => number)(i)
-      sum += height
-      if (sum >= scrollTop) {
-        offset = i
-        break
+    if (typeof itemHeight === 'number') {
+      offset = Math.floor(scrollTop / itemHeight) + 1
+    } else {
+      let sum = 0
+      for (let i = 0; i < state.length; i++) {
+        const height = itemHeight(i)
+        sum += height
+        if (sum >= scrollTop) {
+          offset = i
+          break
+        }
       }
+      offset += 1
     }
-    return offset + 1
+    return offset
   }
 
   // 计算展示指定位置
   const calculateRange = () => {
-    console.log(1)
-
     const element = containerRef.value
     if (element) {
       const offset = getOffset(element.scrollTop)
       const viewCapacity = getViewCapacity(element.clientHeight)
 
+      // 一般来说 from 和 to 的差值在20个，可以保证视图正常
       const from = offset - overscan
       const to = offset + viewCapacity + overscan
       start = from < 0 ? 0 : from
