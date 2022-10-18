@@ -4,6 +4,7 @@ type Fn = (...args: ArgsAny) => Promise<any>
 
 const useLockFn = (fn: Fn) => {
   const lock = ref(false)
+
   return async (...args: ArgsAny) => {
     if (lock.value) return
     lock.value = true
